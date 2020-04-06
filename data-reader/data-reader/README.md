@@ -2,7 +2,7 @@
 The following was discovered as part of building this project:
 
 ## HOW TO USE?
- > git clone "endereço"
+ > git clone https://github.com/LucaGemelli/Data_Reader
  > open in eclipse the project
  > use java 8 to run
  > create archive in homepath/data/in ends with .txt
