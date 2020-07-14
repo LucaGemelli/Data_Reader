@@ -16,21 +16,19 @@ import com.luca.gemelli.datareader.model.File;
 import com.luca.gemelli.datareader.model.General;
 import com.luca.gemelli.datareader.model.Sale;
 import com.luca.gemelli.datareader.model.Seller;
+import com.luca.gemelli.datareader.service.FileService;
 
 public class DirectoryProcessor {
-
-	private static final String ENDFILE = ".dat";
 
     private General general;
 
     private List<File> files;
 
-    private String inputPath;
+    private FileService fileService;
 
-    public DirectoryProcessor(final String inputPath,
-                              final General general,
+    public DirectoryProcessor(final General general,
                               final List<File> filesReports) {
-        this.inputPath = inputPath;
+        this.fileService = new FileService();
         this.general = general;
         this.files = filesReports;
     }
@@ -54,8 +52,9 @@ public class DirectoryProcessor {
                                                           general
         );
 
-        Files.list(Paths.get(inputPath))
-                        .filter(p -> p.toString().endsWith(ENDFILE))
+        String caminho = this.fileService.getPathIn();
+        Files.list(Paths.get(caminho))
+                        .filter(p -> p.toString().endsWith(FileService.ENDFILE))
                         .forEach(p -> {
             try {
                 File report = processor.process(Files.lines(p));

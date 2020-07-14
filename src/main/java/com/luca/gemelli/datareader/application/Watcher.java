@@ -6,6 +6,8 @@ import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
 import java.nio.file.WatchService;
 
+import com.luca.gemelli.datareader.service.FileService;
+
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
@@ -14,16 +16,16 @@ public class Watcher {
     private static final String MESSAGE = "Aguardando novos arquivos para reprocessar...\n";
     private Application application;
 
-    private String inputPath;
+    private FileService fileService;
 
-    public Watcher(Application application, String in) {
+    public Watcher(final Application application) {
+    	this.fileService = new FileService();
         this.application = application;
-        this.inputPath = in;
     }
 
     public void watch() throws Exception {
         final WatchService watchService = FileSystems.getDefault().newWatchService();
-        Paths.get(inputPath)
+        Paths.get(this.fileService.getPathIn())
              .register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
         WatchKey key;
         log.info(MESSAGE);
