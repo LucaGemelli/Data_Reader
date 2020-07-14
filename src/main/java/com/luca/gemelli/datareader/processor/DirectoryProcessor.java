@@ -7,68 +7,71 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Stream;
 
 import com.luca.gemelli.datareader.layout.CustomerLayout;
 import com.luca.gemelli.datareader.layout.SaleLayout;
-import com.luca.gemelli.datareader.layout.SalesmanLayout;
+import com.luca.gemelli.datareader.layout.SellerLayout;
 import com.luca.gemelli.datareader.model.Customer;
-import com.luca.gemelli.datareader.model.FileReport;
-import com.luca.gemelli.datareader.model.GeneralReport;
+import com.luca.gemelli.datareader.model.File;
+import com.luca.gemelli.datareader.model.General;
 import com.luca.gemelli.datareader.model.Sale;
-import com.luca.gemelli.datareader.model.Salesman;
+import com.luca.gemelli.datareader.model.Seller;
 
 public class DirectoryProcessor {
 
-    private GeneralReport generalReport;
+	private static final String ENDFILE = ".dat";
 
-    private List<FileReport> filesReports;
+    private General general;
+
+    private List<File> files;
 
     private String inputPath;
 
-    public DirectoryProcessor(String inputPath, GeneralReport generalReport, List<FileReport> filesReports) {
+    public DirectoryProcessor(final String inputPath,
+                              final General general,
+                              final List<File> filesReports) {
         this.inputPath = inputPath;
-        this.generalReport = generalReport;
-        this.filesReports = filesReports;
+        this.general = general;
+        this.files = filesReports;
     }
 
     public void process() throws IOException {
-        Map<String, Salesman> salesmanMap = new HashMap<>();
-        Map<String, Customer> customerMap = new HashMap<>();
-        Map<Integer, Sale> saleMap = new HashMap<>();
+        final Map<String, Seller> sellerMap = new HashMap<>();
+        final Map<String, Customer> customerMap = new HashMap<>();
+        final Map<Integer, Sale> saleMap = new HashMap<>();
 
-        SalesmanLayout salesmanLayout = new SalesmanLayout();
-        CustomerLayout customerLayout = new CustomerLayout();
-        SaleLayout saleLayout = new SaleLayout();
-        saleLayout.setSalesmanMap(salesmanMap);
+        final SellerLayout sellerLayout = new SellerLayout();
+        final CustomerLayout customerLayout = new CustomerLayout();
+        final SaleLayout saleLayout = new SaleLayout();
+        saleLayout.setSellerMap(sellerMap);
 
-        FileProcessor processor = new FileProcessor(
-            salesmanLayout,
-            customerLayout,
-            saleLayout,
-            salesmanMap,
-            customerMap,
-            saleMap,
-            generalReport
+        final FileProcessor processor = new FileProcessor(sellerLayout,
+                                                          customerLayout,
+                                                          saleLayout,
+                                                          sellerMap,
+                                                          customerMap,
+                                                          saleMap,
+                                                          general
         );
 
-        Files.list(Paths.get(inputPath)).filter(p -> p.toString().endsWith(".dat")).forEach(p -> {
+        Files.list(Paths.get(inputPath))
+                        .filter(p -> p.toString().endsWith(ENDFILE))
+                        .forEach(p -> {
             try {
-                Stream<String> lines = Files.lines(p);
-                FileReport report = processor.process(lines);
+                File report = processor.process(Files.lines(p));
                 report.setFile(p.toString());
-                filesReports.add(report);
+                files.add(report);
             } catch (IOException e) {
                 e.printStackTrace();
             }
         });
 
-        if (salesmanMap.size() > 0) {
-            Salesman worstSalesman = salesmanMap.values()
-                    .stream()
-                    .min(Comparator.comparingDouble(Salesman::getSales))
-                    .get();
-            generalReport.setWorstSalesman(worstSalesman);
+        if (sellerMap.size() > 0) {
+            Seller worstSalesman = sellerMap.values()
+                                            .stream()
+                                            .min(Comparator.comparingDouble(Seller::getSales))
+                                            .get();
+            general.setWorstSalesman(worstSalesman);
         }
 
     }

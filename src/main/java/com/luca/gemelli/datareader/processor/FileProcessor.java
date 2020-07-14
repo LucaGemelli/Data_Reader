@@ -5,66 +5,63 @@ import java.util.stream.Stream;
 
 import com.luca.gemelli.datareader.layout.CustomerLayout;
 import com.luca.gemelli.datareader.layout.SaleLayout;
-import com.luca.gemelli.datareader.layout.SalesmanLayout;
+import com.luca.gemelli.datareader.layout.SellerLayout;
 import com.luca.gemelli.datareader.model.Customer;
-import com.luca.gemelli.datareader.model.FileReport;
-import com.luca.gemelli.datareader.model.GeneralReport;
+import com.luca.gemelli.datareader.model.File;
+import com.luca.gemelli.datareader.model.General;
 import com.luca.gemelli.datareader.model.Sale;
-import com.luca.gemelli.datareader.model.Salesman;
+import com.luca.gemelli.datareader.model.Seller;
 
 import lombok.extern.slf4j.Slf4j;
 
 @Slf4j
 public class FileProcessor {
 
-	private SalesmanLayout salesmanLayout;
-	private CustomerLayout customerLayout;
-	private SaleLayout saleLayout;
+    private SellerLayout salesmanLayout;
+    private CustomerLayout customerLayout;
+    private SaleLayout saleLayout;
 
-	private Map<Integer, Sale> saleMap;
-	private Map<String, Customer> customerMap;
-	private Map<String, Salesman> salesmanMap;
-	private GeneralReport generalReport;
+    private Map<Integer, Sale> saleMap;
+    private Map<String, Customer> customerMap;
+    private Map<String, Seller> salesmanMap;
+    private General generalReport;
 
-	public FileProcessor(
-			SalesmanLayout salesmanLayout,
-			CustomerLayout customerLayout,
-			SaleLayout saleLayout,
-			Map<String, Salesman> salesmanMap,
-			Map<String, Customer> customerMap,
-			Map<Integer, Sale> saleMap,
-			GeneralReport generalReport
-		) {
-		this.salesmanLayout = salesmanLayout;
-		this.customerLayout = customerLayout;
-		this.saleLayout = saleLayout;
-		this.salesmanMap = salesmanMap;
-		this.customerMap = customerMap;
-		this.saleMap = saleMap;
-		this.generalReport = generalReport;
-	}
+    public FileProcessor(final SellerLayout sellerLayout,
+                         final CustomerLayout customerLayout,
+                         final SaleLayout saleLayout,
+                         final Map<String, Seller> sellerMap,
+                         final Map<String, Customer> customerMap,
+                         final Map<Integer, Sale> saleMap,
+                         final General generalReport) {
+        this.salesmanLayout = sellerLayout;
+        this.customerLayout = customerLayout;
+        this.saleLayout = saleLayout;
+        this.salesmanMap = sellerMap;
+        this.customerMap = customerMap;
+        this.saleMap = saleMap;
+        this.generalReport = generalReport;
+    }
 
-	public FileReport process(Stream<String> lines) {
-		FileReport fileReport = new FileReport();
-		LineProcessor lineProcessor = new LineProcessor(
-			salesmanLayout,
-			customerLayout,
-			saleLayout,
-			salesmanMap,
-			customerMap,
-			saleMap,
-			generalReport,
-			fileReport
-		);
-		lines.forEach(line -> {
-			try {
-				lineProcessor.process(line);
-			} catch (Exception e) {
-				log.info("Erro ao processar linha - " + e.getMessage());
-			}
-		});
+    public File process(final Stream<String> lines) {
+        final File fileReport = new File();
+        final LineProcessor lineProcessor = new LineProcessor(salesmanLayout,
+                                                              customerLayout,
+                                                              saleLayout,
+                                                              salesmanMap,
+                                                              customerMap,
+                                                              saleMap,
+                                                              generalReport,
+                                                              fileReport);
 
-		return fileReport;
-	}
+        lines.forEach(line -> {
+            try {
+               lineProcessor.process(line);
+            } catch (Exception e) {
+              log.info("Erro ao processar linha - " + e.getMessage());
+            }
+        });
+
+        return fileReport;
+    }
 
 }

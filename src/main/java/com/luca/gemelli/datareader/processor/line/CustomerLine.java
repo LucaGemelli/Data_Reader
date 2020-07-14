@@ -4,26 +4,28 @@ import java.util.Map;
 
 import com.luca.gemelli.datareader.layout.CustomerLayout;
 import com.luca.gemelli.datareader.model.Customer;
-import com.luca.gemelli.datareader.model.FileReport;
+import com.luca.gemelli.datareader.model.File;
 
 public class CustomerLine implements Line {
 
-    private CustomerLayout customerLayout;
+    private CustomerLayout layout;
     private Map<String, Customer> customerMap;
-    private FileReport fileReport;
+    private File file;
 
-    public CustomerLine(CustomerLayout customerLayout, Map<String, Customer> customerMap, FileReport fileReport) {
-        this.customerLayout = customerLayout;
+    public CustomerLine(final CustomerLayout layout,
+                        final Map<String, Customer> customerMap,
+                        final File file) {
+        this.layout = layout;
         this.customerMap = customerMap;
-        this.fileReport = fileReport;
+        this.file = file;
     }
 
-    public void process(String line) {
-        Customer customer = customerLayout.read(line);
+    public void process(final String line) {
+        final Customer customer = layout.read(line);
         if (!customerMap.containsKey(customer.getName())) {
             customerMap.put(customer.getName(), customer);
         }
 
-        fileReport.incrementAmountClients();
+        file.incrementAmountClients();
     }
 }

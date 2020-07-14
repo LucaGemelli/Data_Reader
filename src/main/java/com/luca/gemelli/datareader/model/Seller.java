@@ -3,7 +3,7 @@ package com.luca.gemelli.datareader.model;
 import lombok.Data;
 
 @Data
-public class Salesman {
+public class Seller {
 
     private String cpf;
 

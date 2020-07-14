@@ -7,34 +7,33 @@ import java.util.stream.Collectors;
 
 import com.luca.gemelli.datareader.model.Item;
 import com.luca.gemelli.datareader.model.Sale;
-import com.luca.gemelli.datareader.model.Salesman;
+import com.luca.gemelli.datareader.model.Seller;
 
 public class SaleLayout extends AbstractLayout<Sale> {
 
     public static final String LAYOUT_CODE = "003";
 
-    public static final int FIELD_CODE = 0;
-    public static final int FIELD_SALE_ID = 1;
-    public static final int FIELD_ITEMS = 2;
-    public static final int FIELD_SALESMAN_NAME = 3;
+    public static final int CODE_SALE_ID = 1;
+    public static final int CODE_ITEMS = 2;
+    public static final int CODE_SELLER_NAME = 3;
 
-    public static final int FIELD_ITEM_ID = 0;
-    public static final int FIELD_ITEM_QUANTITY = 1;
-    public static final int FIELD_ITEM_PRICE = 2;
+    public static final int CODE_ITEM_ID = 0;
+    public static final int CODE_ITEM_QUANTITY = 1;
+    public static final int CODE_ITEM_PRICE = 2;
 
-    private Map<String, Salesman> salesmanMap;
+    private Map<String, Seller> sellerMap;
 
-    public void setSalesmanMap(Map<String, Salesman> salesmanMap) {
-        this.salesmanMap = salesmanMap;
+    public void setSellerMap(Map<String, Seller> sellerMap) {
+        this.sellerMap = sellerMap;
     }
 
     @Override
     public Sale read(String line) {
-        String[] fields = line.split(FIELD_DELIMITER);
+        final String[] fields = line.split(SEPARATOR);
 
-        Salesman salesman = salesmanMap.get(fields[FIELD_SALESMAN_NAME]);
+        final Seller seller = sellerMap.get(fields[CODE_SELLER_NAME]);
 
-        String rawItems = fields[FIELD_ITEMS].substring(1, fields[FIELD_ITEMS].length() - 1);
+        final String rawItems = fields[CODE_ITEMS].substring(1, fields[CODE_ITEMS].length() - 1);
 
         List<Item> items = Arrays.asList(rawItems.split(","))
             .stream()
@@ -42,17 +41,17 @@ public class SaleLayout extends AbstractLayout<Sale> {
                 String[] itemData = rawItem.split("-");
 
                 Item item = new Item();
-                item.setId(Integer.parseInt(itemData[FIELD_ITEM_ID]));
-                item.setQuantity(Integer.parseInt(itemData[FIELD_ITEM_QUANTITY]));
-                item.setPrice(Double.parseDouble(itemData[FIELD_ITEM_PRICE]));
+                item.setId(Integer.parseInt(itemData[CODE_ITEM_ID]));
+                item.setQuantity(Integer.parseInt(itemData[CODE_ITEM_QUANTITY]));
+                item.setPrice(Double.parseDouble(itemData[CODE_ITEM_PRICE]));
                 return item;
             })
             .collect(Collectors.toList());
 
-        Sale sale = new Sale();
-        sale.setId(Integer.parseInt(fields[FIELD_SALE_ID]));
+        final Sale sale = new Sale();
+        sale.setId(Integer.parseInt(fields[CODE_SALE_ID]));
         sale.setItems(items);
-        sale.setSalesman(salesman);
+        sale.setSeller(seller);
 
         return sale;
     }

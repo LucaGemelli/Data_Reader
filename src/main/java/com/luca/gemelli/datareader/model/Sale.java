@@ -9,7 +9,7 @@ public class Sale {
 
     private int id;
 
-    private Salesman salesman;
+    private Seller seller;
 
     private List<Item> items;
 

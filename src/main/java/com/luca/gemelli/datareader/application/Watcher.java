@@ -1,7 +1,6 @@
 package com.luca.gemelli.datareader.application;
 
 import java.nio.file.FileSystems;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardWatchEventKinds;
 import java.nio.file.WatchKey;
@@ -22,9 +21,9 @@ public class Watcher {
     }
 
     public void watch() throws Exception {
-        Path path = Paths.get(inputPath);
-        WatchService watchService = FileSystems.getDefault().newWatchService();
-        path.register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
+        final WatchService watchService = FileSystems.getDefault().newWatchService();
+        Paths.get(inputPath)
+             .register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
         WatchKey key;
         String message = "Aguardando novos arquivos para reprocessar...\n";
         log.info(message);
