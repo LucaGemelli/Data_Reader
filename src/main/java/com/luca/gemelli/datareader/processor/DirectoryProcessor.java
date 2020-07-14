@@ -67,11 +67,10 @@ public class DirectoryProcessor {
         });
 
         if (sellerMap.size() > 0) {
-            Seller worstSalesman = sellerMap.values()
-                                            .stream()
-                                            .min(Comparator.comparingDouble(Seller::getSales))
-                                            .get();
-            general.setWorstSalesman(worstSalesman);
+            general.setWorstSeller(sellerMap.values()
+                                       .stream()
+                                       .min(Comparator.comparingDouble(Seller::getSales))
+                                       .get());
         }
 
     }

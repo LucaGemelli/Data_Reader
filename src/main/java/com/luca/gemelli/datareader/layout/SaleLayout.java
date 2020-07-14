@@ -23,7 +23,7 @@ public class SaleLayout extends AbstractLayout<Sale> {
 
     private Map<String, Seller> sellerMap;
 
-    public void setSellerMap(Map<String, Seller> sellerMap) {
+    public void setSellerMap(final Map<String, Seller> sellerMap) {
         this.sellerMap = sellerMap;
     }
 
@@ -31,29 +31,23 @@ public class SaleLayout extends AbstractLayout<Sale> {
     public Sale read(String line) {
         final String[] fields = line.split(SEPARATOR);
 
-        final Seller seller = sellerMap.get(fields[CODE_SELLER_NAME]);
-
         final String rawItems = fields[CODE_ITEMS].substring(1, fields[CODE_ITEMS].length() - 1);
 
         List<Item> items = Arrays.asList(rawItems.split(","))
             .stream()
             .map(rawItem -> {
                 String[] itemData = rawItem.split("-");
-
-                Item item = new Item();
-                item.setId(Integer.parseInt(itemData[CODE_ITEM_ID]));
-                item.setQuantity(Integer.parseInt(itemData[CODE_ITEM_QUANTITY]));
-                item.setPrice(Double.parseDouble(itemData[CODE_ITEM_PRICE]));
-                return item;
+                return Item.create()
+                           .withId(Integer.parseInt(itemData[CODE_ITEM_ID]))
+                           .withQuantity(Integer.parseInt(itemData[CODE_ITEM_QUANTITY]))
+                           .withPrice(Double.parseDouble(itemData[CODE_ITEM_PRICE]));
             })
             .collect(Collectors.toList());
 
-        final Sale sale = new Sale();
-        sale.setId(Integer.parseInt(fields[CODE_SALE_ID]));
-        sale.setItems(items);
-        sale.setSeller(seller);
-
-        return sale;
+        return Sale.create()
+                   .withId(Integer.parseInt(fields[CODE_SALE_ID]))
+                   .withItems(items)
+                   .withSeller(sellerMap.get(fields[CODE_SELLER_NAME]));
     }
 
 }

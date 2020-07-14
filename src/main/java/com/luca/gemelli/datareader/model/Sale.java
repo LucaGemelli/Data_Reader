@@ -17,4 +17,22 @@ public class Sale {
         return items.stream().mapToDouble(item -> item.getPrice() * item.getQuantity()).sum();
     }
 
+    public static synchronized Sale create() {
+        return new Sale();
+	}
+
+    public Sale withId(final int id) {
+        this.id = id;
+        return this;
+    }
+
+    public Sale withSeller(final Seller seller) {
+        this.seller = seller;
+        return this;
+	}
+
+    public Sale withItems(final List<Item> items) {
+        this.items = items;
+        return this;
+	}
 }

@@ -11,23 +11,23 @@ public class SaleLine implements Line {
 
     private SaleLayout layout;
     private Map<Integer, Sale> saleMap;
-    private General generalReport;
+    private General general;
 
     public SaleLine(final SaleLayout layout,
                     final Map<Integer, Sale> saleMap,
                     final General generalReport) {
         this.layout = layout;
         this.saleMap = saleMap;
-        this.generalReport = generalReport;
+        this.general = generalReport;
     }
 
     public void process(final String line) {
         final Sale sale = layout.read(line);
-        if (generalReport.getMostExpensiveSale() == null) {
-            generalReport.setMostExpensiveSale(sale);
+        if (general.getMostExpensiveSale() == null) {
+            general.setMostExpensiveSale(sale);
         }
-        if (sale.getTotal() > generalReport.getMostExpensiveSale().getTotal()) {
-            generalReport.setMostExpensiveSale(sale);
+        if (sale.getTotal() > general.getMostExpensiveSale().getTotal()) {
+            general.setMostExpensiveSale(sale);
         }
         final Seller saleSeller = sale.getSeller();
         saleSeller.addSale(sale.getTotal());

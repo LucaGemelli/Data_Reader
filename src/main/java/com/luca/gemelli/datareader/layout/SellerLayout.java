@@ -12,13 +12,11 @@ public class SellerLayout extends AbstractLayout<Seller> {
 
     @Override
     public Seller read(final String line) {
-    	String[] fields = line.split(SEPARATOR);
-        final Seller seller = new Seller();
-        seller.setCpf(fields[CODE_CPF]);
-        seller.setName(fields[CODE_NAME]);
-        seller.setSalary(Double.parseDouble(fields[CODE_SALARY]));
-
-        return seller;
+        final String[] fields = line.split(SEPARATOR);
+        return Seller.create()
+                     .withCpf(fields[CODE_CPF])
+                     .withName(fields[CODE_NAME])
+                     .withSalary(Double.parseDouble(fields[CODE_SALARY]));
     }
 
 }

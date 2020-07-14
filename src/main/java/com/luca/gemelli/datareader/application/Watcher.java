@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 public class Watcher {
 
+    private static final String MESSAGE = "Aguardando novos arquivos para reprocessar...\n";
     private Application application;
 
     private String inputPath;
@@ -25,14 +26,13 @@ public class Watcher {
         Paths.get(inputPath)
              .register(watchService, StandardWatchEventKinds.ENTRY_CREATE);
         WatchKey key;
-        String message = "Aguardando novos arquivos para reprocessar...\n";
-        log.info(message);
+        log.info(MESSAGE);
 
         while ((key = watchService.take()) != null) {
             key.pollEvents();
             application.run();
             key.reset();
-            log.info(message);
+            log.info(MESSAGE);
         }
     }
 

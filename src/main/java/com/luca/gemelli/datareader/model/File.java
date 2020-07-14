@@ -33,4 +33,22 @@ public class File {
                               .toString();
     }
 
+    public static synchronized File create() {
+        return new File();
+	}
+
+	public File withFile(final String file) {
+        this.file = file;
+        return this;
+	}
+
+	public File withAmountClients(final int amountClients) {
+        this.amountClients = amountClients;
+        return this;
+	}
+
+	public File withAmountSeller(final int amountSeller) {
+        this.amountSeller = amountSeller;
+        return this;
+	}
 }
