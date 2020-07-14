@@ -1,5 +1,6 @@
 package com.luca.gemelli.datareader;
 
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -10,8 +11,10 @@ import com.luca.gemelli.datareader.application.Watcher;
 @SpringBootApplication
 public class DataReaderApplication implements CommandLineRunner {
 
+    @Value("${teste.data.in}")
     private String inputPath;
 
+    @Value("${teste.data.out}")
     private String outputPath;
 
     public static void main(String[] args) {
