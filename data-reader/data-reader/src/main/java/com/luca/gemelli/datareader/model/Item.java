@@ -1,54 +1,33 @@
 package com.luca.gemelli.datareader.model;
 
+import lombok.Data;
+
+@Data
 public class Item {
 
-	private String id;
+    private int id;
 
-	private float quantity;
+    private int quantity;
 
-	private float price;
+    private double price;
 
-	public static synchronized Item create() {
+    public static synchronized Item create() {
 		return new Item();
 	}
 
-	public Item withId(final String id) {
+	public Item withId(final int id) {
 		this.id = id;
 		return this;
 	}
 
-	public Item withQuantity(final float quantity) {
+	public Item withQuantity(final int quantity) {
 		this.quantity = quantity;
 		return this;
 	}
 
-	public Item withPrice(final float price) {
+	public Item withPrice(final double price) {
 		this.price = price;
 		return this;
-	}
-
-	public String getId() {
-		return id;
-	}
-
-	public void setId(String id) {
-		this.id = id;
-	}
-
-	public float getQuantity() {
-		return quantity;
-	}
-
-	public void setQuantity(float quantity) {
-		this.quantity = quantity;
-	}
-
-	public float getPrice() {
-		return price;
-	}
-
-	public void setPrice(float price) {
-		this.price = price;
 	}
 
 }

@@ -4,8 +4,8 @@ The following was discovered as part of building this project:
 ## HOW TO USE?
  > git clone https://github.com/LucaGemelli/Data_Reader
  > open in eclipse the project
- > use java 8 to run
- > create archive in homepath/data/in ends with .txt
+ > use java 8 to run with encoding UTF-8.
+ > create archive in homepath/data/in ends with .data
 
 ## Archive Example  
   001ç1234567891234çPedroç50000
